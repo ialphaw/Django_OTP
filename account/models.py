@@ -8,6 +8,7 @@ class Driver(models.Model):
                                      validators=[MinLengthValidator(10)],
                                      unique=True)
     phone = models.CharField(max_length=11)
+    authorized = models.BooleanField(default=False)
 
     def __str__(self):
         return self.user.get_full_name()
@@ -17,6 +18,7 @@ class Passenger(models.Model):
     user = models.OneToOneField('auth.User', on_delete=models.CASCADE)
     email = models.EmailField(max_length=50)
     phone = models.CharField(max_length=11)
+    authorized = models.BooleanField(default=False)
 
     def __str__(self):
         return self.user.get_full_name()                      
