@@ -24,4 +24,23 @@ def auth_driver(request):
         return Response({'Message': 'Authentication Code Sent To Your Phone'})
     else:
         return Response({'Message': '-1'})
-        
+
+
+@api_view(['POST'])
+def validate_driver(request):
+    phone = request.data.get('phone')
+    check_auth_code = request.data.get('auth_code')
+    main_auth_code = AuthUser.objects.filter(phone=phone)
+    driver = Driver.objects.get(phone=phone)
+
+    if main_auth_code.exists():
+        if str(main_auth_code.last()) == check_auth_code:
+            driver.authorized = True
+            driver.save()
+            print(driver.authorized)
+            print(driver)
+            return Response({'Message': 'Phone Activated'})
+        else:
+            return Response({'Message': 'Auth Code Is Wrong'})
+    else:
+        return Response({'Message': 'Authorize Your Phone First'})
